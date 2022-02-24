@@ -17,6 +17,7 @@
  * under the License.
  */
 import React, { useState, useEffect } from 'react';
+import { usePrevious } from 'src/hooks/usePrevious';
 import { useSelector, useDispatch } from 'react-redux';
 import { t, SupersetTheme, css, useTheme } from '@superset-ui/core';
 import Icons from 'src/components/Icons';
@@ -29,39 +30,34 @@ import ReportModal from 'src/components/ReportModal';
 import { ChartState } from 'src/explore/types';
 import { UserWithPermissionsAndRoles } from 'src/types/bootstrapTypes';
 import { fetchUISpecificReport } from 'src/reports/actions/reports';
+import { reportSelector } from 'src/views/CRUD/hooks';
+import { ReportType } from 'src/dashboard/util/constants';
 
 const deleteColor = (theme: SupersetTheme) => css`
   color: ${theme.colors.error.base};
 `;
 
-export default function HeaderReportActionsDropDown({
+export interface HeaderReportProps {
+  toggleActive: (data: AlertObject, isActive: boolean) => void;
+  deleteActiveReport: (data: AlertObject) => void;
+  dashboardId?: number;
+  chart?: ChartState;
+}
+
+export default function HeaderReportDropDown({
   toggleActive,
   deleteActiveReport,
   dashboardId,
   chart,
-}: {
-  toggleActive: (data: AlertObject, checked: boolean) => void;
-  deleteActiveReport: (data: AlertObject) => void;
-  dashboardId?: number;
-  chart?: ChartState;
-}) {
+}: HeaderReportProps) {
   const dispatch = useDispatch();
-  const report: AlertObject = useSelector<any, AlertObject>(state => {
-    if (dashboardId) {
-      return state.reports.dashboards?.[dashboardId];
-    }
-    if (chart?.id) {
-      return state.reports.charts?.[chart.id];
-    }
-    return {};
-  });
-  // const report: ReportObject = Object.values(reports).filter(report => {
-  //   if (dashboardId) {
-  //     return report.dashboards?.[dashboardId];
-  //   }
-  //   // return report.charts?.[chart?.id]
-  // })[0];
 
+  const report = useSelector<any, AlertObject>(state => {
+    const resourceType = dashboardId
+      ? ReportType.DASHBOARDS
+      : ReportType.CHARTS;
+    return reportSelector(state, resourceType, dashboardId || chart?.id);
+  });
   const user: UserWithPermissionsAndRoles = useSelector<
     any,
     UserWithPermissionsAndRoles
@@ -69,6 +65,7 @@ export default function HeaderReportActionsDropDown({
   const [currentReportDeleting, setCurrentReportDeleting] =
     useState<AlertObject | null>(null);
   const theme = useTheme();
+  const prevDashboard = usePrevious(dashboardId);
   const [showModal, setShowModal] = useState<boolean>(false);
   const toggleActiveKey = async (data: AlertObject, checked: boolean) => {
     if (data?.id) {
@@ -85,6 +82,7 @@ export default function HeaderReportActionsDropDown({
     if (!isFeatureEnabled(FeatureFlag.ALERT_REPORTS)) {
       return false;
     }
+
     if (!user?.userId) {
       // this is in the case that there is an anonymous user.
       return false;
@@ -97,9 +95,12 @@ export default function HeaderReportActionsDropDown({
     );
     return permissions[0].length > 0;
   };
+  const shouldFetch =
+    canAddReports() &&
+    !!((dashboardId && prevDashboard !== dashboardId) || chart?.id);
 
   useEffect(() => {
-    if (canAddReports()) {
+    if (shouldFetch) {
       dispatch(
         fetchUISpecificReport({
           userId: user.userId,
@@ -110,19 +111,6 @@ export default function HeaderReportActionsDropDown({
       );
     }
   }, []);
-
-  useEffect(() => {
-    if (canAddReports()) {
-      dispatch(
-        fetchUISpecificReport({
-          userId: user.userId,
-          filterField: dashboardId ? 'dashboard_id' : 'chart_id',
-          creationMethod: dashboardId ? 'dashboards' : 'charts',
-          resourceId: dashboardId || chart?.id,
-        }),
-      );
-    }
-  }, [dashboardId]);
 
   const menu = () => (
     <Menu selectable={false} css={{ width: '200px' }}>
@@ -147,61 +135,61 @@ export default function HeaderReportActionsDropDown({
       </Menu.Item>
     </Menu>
   );
-
   return (
-    canAddReports() && (
-      <>
-        <ReportModal
-          userId={user.userId}
-          showModal={showModal}
-          onHide={() => setShowModal(false)}
-          userEmail={user.email}
-          dashboardId={dashboardId}
-          chart={chart}
-        />
-        {report ? (
-          <>
-            <NoAnimationDropdown
-              // ref={ref}
-              overlay={menu()}
-              trigger={['click']}
-              getPopupContainer={(triggerNode: any) =>
-                triggerNode.closest('.action-button')
-              }
+    <>
+      {canAddReports() && (
+        <>
+          <ReportModal
+            userId={user.userId}
+            showModal={showModal}
+            onHide={() => setShowModal(false)}
+            userEmail={user.email}
+            dashboardId={dashboardId}
+            chart={chart}
+          />
+          {report ? (
+            <>
+              <NoAnimationDropdown
+                overlay={menu()}
+                trigger={['click']}
+                getPopupContainer={(triggerNode: any) =>
+                  triggerNode.closest('.action-button')
+                }
+              >
+                <span role="button" className="action-button" tabIndex={0}>
+                  <Icons.Calendar />
+                </span>
+              </NoAnimationDropdown>
+              {currentReportDeleting && (
+                <DeleteModal
+                  description={t(
+                    'This action will permanently delete %s.',
+                    currentReportDeleting.name,
+                  )}
+                  onConfirm={() => {
+                    if (currentReportDeleting) {
+                      handleReportDelete(currentReportDeleting);
+                    }
+                  }}
+                  onHide={() => setCurrentReportDeleting(null)}
+                  open
+                  title={t('Delete Report?')}
+                />
+              )}
+            </>
+          ) : (
+            <span
+              role="button"
+              title={t('Schedule email report')}
+              tabIndex={0}
+              className="action-button"
+              onClick={() => setShowModal(true)}
             >
-              <span role="button" className="action-button" tabIndex={0}>
-                <Icons.Calendar />
-              </span>
-            </NoAnimationDropdown>
-            {currentReportDeleting && (
-              <DeleteModal
-                description={t(
-                  'This action will permanently delete %s.',
-                  currentReportDeleting.name,
-                )}
-                onConfirm={() => {
-                  if (currentReportDeleting) {
-                    handleReportDelete(currentReportDeleting);
-                  }
-                }}
-                onHide={() => setCurrentReportDeleting(null)}
-                open
-                title={t('Delete Report?')}
-              />
-            )}
-          </>
-        ) : (
-          <span
-            role="button"
-            title={t('Schedule email report')}
-            tabIndex={0}
-            className="action-button"
-            onClick={() => setShowModal(true)}
-          >
-            <Icons.Calendar />
-          </span>
-        )}
-      </>
-    )
+              <Icons.Calendar />
+            </span>
+          )}
+        </>
+      )}
+    </>
   );
 }
