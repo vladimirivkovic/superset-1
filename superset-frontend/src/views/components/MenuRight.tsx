@@ -85,7 +85,8 @@ const RightMenu = ({
   const canSql = findPermission('can_sqllab', 'Superset', roles);
   const canDashboard = findPermission('can_write', 'Dashboard', roles);
   const canChart = findPermission('can_write', 'Chart', roles);
-  const showActionDropdown = canSql || canChart || canDashboard;
+  const canDatabase = findPermission('can_write', 'Database', roles);
+  const showActionDropdown = canSql || canChart || canDashboard || canDatabase;
   const dropdownItems: MenuObjectProps[] = [
     {
       label: t('Data'),
@@ -94,12 +95,12 @@ const RightMenu = ({
         {
           label: t('Connect Database'),
           name: GlobalMenuDataOptions.DB_CONNECTION,
-          perm: true,
+          perm: canDatabase,
         },
         {
           label: t('Connect Google Sheet'),
           name: GlobalMenuDataOptions.GOOGLE_SHEETS,
-          perm: HAS_GSHEETS_INSTALLED,
+          perm: canDatabase && HAS_GSHEETS_INSTALLED,
         },
         {
           label: t('Upload a CSV'),
