@@ -38,10 +38,16 @@ export interface EchartsProps {
   zrEventHandlers?: EventHandlers;
   selectedValues?: Record<number, string>;
   forceClear?: boolean;
+  transition?: EchartTransition;
 }
 
 export interface EchartsHandler {
   getEchartInstance: () => ECharts | undefined;
+}
+
+export interface EchartTransition {
+  newEchartOptions: EChartsCoreOption;
+  timeout: number;
 }
 
 export enum ForecastSeriesEnum {
@@ -87,7 +93,7 @@ export const DEFAULT_LEGEND_FORM_DATA: EchartsLegendFormData = {
   legendMargin: null,
   legendOrientation: LegendOrientation.Top,
   legendType: LegendType.Scroll,
-  showLegend: false,
+  showLegend: true,
 };
 
 export type EventHandlers = Record<string, { (props: any): void }>;
