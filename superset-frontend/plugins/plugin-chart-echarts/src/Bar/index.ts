@@ -21,9 +21,8 @@ import buildQuery from './buildQuery';
 import controlPanel from './controlPanel';
 import transformProps from './transformProps';
 import thumbnail from './images/thumbnail.png';
-import example1 from './images/Time_Series_Bar_Chart.jpg';
-import example2 from './images/Time_Series_Bar_Chart2.jpg';
-import example3 from './images/Time_Series_Bar_Chart3.jpg';
+import example1 from './images/Horizontal_Bar_Chart.png';
+import example2 from './images/Horizontal_Bar_Chart2.png';
 import { EchartsBarChartProps, EchartsBarFormData } from './types';
 
 export default class EchartsBarChartPlugin extends ChartPlugin<
@@ -49,21 +48,13 @@ export default class EchartsBarChartPlugin extends ChartPlugin<
         behaviors: [Behavior.INTERACTIVE_CHART],
         category: t('Part of a Whole'),
         credits: ['https://echarts.apache.org'],
-        description:
-          t(`The classic. Great for showing how much of a company each investor gets, what demographics follow your blog, or what portion of the budget goes to the military industrial complex.
-
-        Pie charts can be difficult to interpret precisely. If clarity of relative proportion is important, consider using a bar or other chart type instead.`),
-        exampleGallery: [
-          { url: example1 },
-          { url: example2 },
-          { url: example3 },
-        ],
-        name: t('HBar Chart'),
+        description: t(`Categorical Bar chart from ECharts.`),
+        exampleGallery: [{ url: example1 }, { url: example2 }],
+        name: t('Horizontal Bar Chart'),
         tags: [
           t('Aesthetic'),
           t('Categorical'),
           t('Comparison'),
-          t('Percentages'),
           t('Popular'),
           t('Proportional'),
           t('ECharts'),
