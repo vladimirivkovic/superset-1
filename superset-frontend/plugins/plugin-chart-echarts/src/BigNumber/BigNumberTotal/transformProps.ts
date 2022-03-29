@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { getBigNumberColor } from '@superset-ui/chart-controls';
 import {
   getNumberFormatter,
   GenericDataType,
@@ -36,6 +37,7 @@ export default function transformProps(chartProps: BigNumberTotalChartProps) {
     forceTimestampFormatting,
     timeFormat,
     yAxisFormat,
+    conditionalFormatting,
   } = formData;
   const { data = [], coltypes = [] } = queriesData[0];
   const granularity = extractTimegrain(rawFormData as QueryFormData);
@@ -50,6 +52,8 @@ export default function transformProps(chartProps: BigNumberTotalChartProps) {
       metricItem => metricItem.metric_name === metric,
     );
   }
+
+  const color = getBigNumberColor(conditionalFormatting, bigNumber)
 
   const formatTime = getDateFormatter(
     timeFormat,
@@ -72,5 +76,6 @@ export default function transformProps(chartProps: BigNumberTotalChartProps) {
     headerFontSize,
     subheaderFontSize,
     subheader: formattedSubheader,
+    backgroundColor: color,
   };
 }

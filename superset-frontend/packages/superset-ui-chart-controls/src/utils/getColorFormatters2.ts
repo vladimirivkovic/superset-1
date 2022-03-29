@@ -176,3 +176,27 @@ export const getColorFormatters2 = (
     },
     [],
   ) ?? [];
+
+export const getBigNumberColor = (
+  columnConfig: ConditionalFormattingConfig[] | undefined,
+  bigNumber: number | null,
+) =>
+  columnConfig?.reduce(
+    (color: string | undefined, config: ConditionalFormattingConfig) => {
+      if ( 
+        bigNumber !== null &&
+        config?.column !== undefined &&
+        (config?.operator === COMPARATOR.NONE ||
+          (config?.operator !== undefined &&
+            (MULTIPLE_VALUE_COMPARATORS.includes(config?.operator)
+              ? config?.targetValueLeft !== undefined &&
+                config?.targetValueRight !== undefined
+              : config?.targetValue !== undefined)))
+      ) {
+        const newColor = getColorFunction(config, [bigNumber])(bigNumber);
+        color = newColor === undefined ? color : newColor;
+      }
+      return color;
+    },
+    undefined,
+  ) ?? undefined;

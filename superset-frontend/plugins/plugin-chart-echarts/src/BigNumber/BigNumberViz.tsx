@@ -62,6 +62,7 @@ type BigNumberVisProps = {
   trendLineData?: TimeSeriesDatum[];
   mainColor: string;
   echartOptions: EChartsCoreOption;
+  backgroundColor: string;
 };
 
 class BigNumberVis extends React.PureComponent<BigNumberVisProps> {
@@ -237,6 +238,7 @@ class BigNumberVis extends React.PureComponent<BigNumberVisProps> {
       kickerFontSize,
       headerFontSize,
       subheaderFontSize,
+      backgroundColor,
     } = this.props;
     const className = this.getClassName();
 
@@ -266,7 +268,7 @@ class BigNumberVis extends React.PureComponent<BigNumberVisProps> {
     }
 
     return (
-      <div className={className} style={{ height }}>
+      <div className={className} style={{ height, background: backgroundColor }}>
         {this.renderFallbackWarning()}
         {this.renderKicker(kickerFontSize * height)}
         {this.renderHeader(Math.ceil(headerFontSize * height))}
