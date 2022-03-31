@@ -30,6 +30,7 @@ import {
   DEFAULT_LEGEND_FORM_DATA,
   EchartsLegendFormData,
   EchartTransition,
+  LabelPositionEnum,
   LegendOrientation,
   LegendType,
 } from '../types';
@@ -55,6 +56,8 @@ export type EchartsBarFormData = QueryFormData &
     animate: boolean;
     vertical: boolean;
     stack: boolean;
+    showValues: boolean;
+    valuePosition: LabelPositionEnum;
     xAxisLabel?: string;
     xAxisLabelLocation?: string;
     xAxisLabelPadding?: number;
@@ -91,6 +94,7 @@ export const DEFAULT_FORM_DATA: EchartsBarFormData = {
   outerRadius: 70,
   showLabels: true,
   labelsOutside: true,
+  valuePosition: LabelPositionEnum.Inside,
   showLabelsThreshold: 5,
   emitFilter: false,
   dateFormat: 'smart_date',
@@ -113,4 +117,20 @@ export const LABEL_LOCATIONS: [string, string][] = [
   ['start', 'start'],
   ['center', 'center'],
   ['end', 'end'],
+];
+
+export const VALUE_POSITIONS: [string, string][] = [
+  ['top', 'top'],
+  ['left', 'left'],
+  ['right', 'right'],
+  ['bottom', 'bottom'],
+  ['inside', 'inside'],
+  ['insideLeft', 'insideLeft'],
+  ['insideRight', 'insideRight'],
+  ['insideTop', 'insideTop'],
+  ['insideBottom', 'insideBottom'],
+  ['insideTopLeft', 'insideTopLeft'],
+  ['insideBottomLeft', 'insideBottomLeft'],
+  ['insideTopRight', 'insideTopRight'],
+  ['insideBottomRight', 'insideBottomRight'],
 ];

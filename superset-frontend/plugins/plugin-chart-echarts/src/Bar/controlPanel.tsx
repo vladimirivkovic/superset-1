@@ -26,7 +26,7 @@ import {
 } from '@superset-ui/chart-controls';
 
 import { legendSection } from '../controls';
-import { LABEL_LOCATIONS } from './types';
+import { LABEL_LOCATIONS, VALUE_POSITIONS } from './types';
 
 const config: ControlPanelConfig = {
   controlPanelSections: [
@@ -104,6 +104,31 @@ const config: ControlPanelConfig = {
               renderTrigger: true,
               default: true,
               description: t('Whether to display stacked bars.'),
+            },
+          },
+        ],
+        [
+          {
+            name: 'showValues',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Show values'),
+              renderTrigger: true,
+              default: true,
+              description: t('Whether to display values.'),
+            },
+          },
+        ],
+        [
+          {
+            name: 'valuePosition',
+            config: {
+              type: 'SelectControl',
+              freeForm: true,
+              label: t('Value position'),
+              renderTrigger: true,
+              choices: VALUE_POSITIONS,
+              default: 'inside',
             },
           },
         ],

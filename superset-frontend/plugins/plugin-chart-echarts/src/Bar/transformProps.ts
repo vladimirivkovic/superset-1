@@ -48,6 +48,7 @@ import { defaultGrid } from '../defaults';
 import { OpacityEnum } from '../constants';
 
 const percentFormatter = getNumberFormatter(NumberFormats.PERCENT_2_POINT);
+const valueFormatter = getNumberFormatter(NumberFormats.SMART_NUMBER);
 
 export function formatBarLabel({
   params,
@@ -105,6 +106,8 @@ export default function transformProps(
     emitFilter,
     vertical,
     stack,
+    showValues,
+    valuePosition,
     xAxisLabel,
     xAxisLabelLocation,
     xAxisLabelPadding,
@@ -147,9 +150,11 @@ export default function transformProps(
 
   const colorFn = CategoricalColorNamespace.getScale(colorScheme as string);
   // const numberFormatter = getNumberFormatter(numberFormat);
-  const colors: ZRColor[] = metricLabels.map(metricLabel =>
-    colorFn(metricLabel),
-  );
+  const colors: ZRColor[] =
+    metricLabels.length > 1
+      ? metricLabels.map(metricLabel => colorFn(metricLabel))
+      : data.map(datum => colorFn(`${datum[metricLabels[0]]}`));
+  console.log(colors);
 
   function getTransformedDataForMetric(metricLabel: string): BarSeriesOption[] {
     return data.map(datum => {
@@ -196,6 +201,17 @@ export default function transformProps(
   const series: BarSeriesOption[] = metricLabels.map(metricLabel => ({
     type: 'bar',
     stack: stack ? 'total' : undefined,
+    colorBy: metricLabels.length > 1 ? 'series' : 'data',
+    label: {
+      show: showValues,
+      position: valuePosition,
+      formatter: (params: any) => {
+        const {
+          data: { value },
+        } = params;
+        return valueFormatter(value);
+      },
+    },
     ...getChartPadding(showLegend, legendOrientation, legendMargin),
     animation: true,
     labelLine: labelsOutside && labelLine ? { show: true } : { show: false },
@@ -215,8 +231,9 @@ export default function transformProps(
     },
     xAxis: {
       type: vertical ? 'category' : 'value',
-      boundaryGap: vertical ? undefined : [0],
+      boundaryGap: vertical ? true : [0, 0.1],
       data: vertical ? keys : undefined,
+      splitLine: false,
       name: xAxisLabel,
       nameLocation: xAxisLabelLocation,
       nameTextStyle: {
@@ -227,8 +244,9 @@ export default function transformProps(
     },
     yAxis: {
       type: vertical ? 'value' : 'category',
-      boundaryGap: vertical ? [0] : undefined,
+      boundaryGap: vertical ? [0, 0.1] : true,
       data: vertical ? undefined : keys,
+      splitLine: false,
       name: yAxisLabel,
       nameLocation: yAxisLabelLocation,
       nameTextStyle: {
