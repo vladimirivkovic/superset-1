@@ -183,7 +183,8 @@ export const getBigNumberColor = (
 ) =>
   columnConfig?.reduce(
     (color: string | undefined, config: ConditionalFormattingConfig) => {
-      if ( 
+      let retColor = color;
+      if (
         bigNumber !== null &&
         config?.column !== undefined &&
         (config?.operator === COMPARATOR.NONE ||
@@ -194,9 +195,9 @@ export const getBigNumberColor = (
               : config?.targetValue !== undefined)))
       ) {
         const newColor = getColorFunction(config, [bigNumber])(bigNumber);
-        color = newColor === undefined ? color : newColor;
+        retColor = newColor === undefined ? color : newColor;
       }
-      return color;
+      return retColor;
     },
     undefined,
   ) ?? undefined;

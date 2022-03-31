@@ -268,7 +268,10 @@ class BigNumberVis extends React.PureComponent<BigNumberVisProps> {
     }
 
     return (
-      <div className={className} style={{ height, background: backgroundColor }}>
+      <div
+        className={className}
+        style={{ height, background: backgroundColor }}
+      >
         {this.renderFallbackWarning()}
         {this.renderKicker(kickerFontSize * height)}
         {this.renderHeader(Math.ceil(headerFontSize * height))}

@@ -53,7 +53,7 @@ export default function transformProps(chartProps: BigNumberTotalChartProps) {
     );
   }
 
-  const color = getBigNumberColor(conditionalFormatting, bigNumber)
+  const color = getBigNumberColor(conditionalFormatting, bigNumber);
 
   const formatTime = getDateFormatter(
     timeFormat,
