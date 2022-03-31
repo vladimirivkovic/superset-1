@@ -16,12 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { smartDateFormatter, t } from '@superset-ui/core';
+import {
+  smartDateFormatter,
+  t,
+  QueryFormMetric,
+  validateNonEmpty,
+} from '@superset-ui/core';
 import {
   ControlPanelConfig,
   D3_FORMAT_DOCS,
   D3_TIME_FORMAT_OPTIONS,
   sections,
+  sharedControls,
 } from '@superset-ui/chart-controls';
 import { headerFontSize, subheaderFontSize } from '../sharedControls';
 
@@ -31,7 +37,19 @@ export default {
     {
       label: t('Query'),
       expanded: true,
-      controlSetRows: [['metric'], ['adhoc_filters']],
+      controlSetRows: [
+        [
+          {
+            name: 'metric',
+            config: {
+              ...sharedControls.metric,
+              validators: [validateNonEmpty],
+              rerender: ['conditional_formatting'],
+            },
+          },
+        ],
+        ['adhoc_filters'],
+      ],
     },
     {
       label: t('Options'),
@@ -85,6 +103,34 @@ export default {
               description: t(
                 'Use date formatting even when metric value is not a timestamp',
               ),
+            },
+          },
+        ],
+        [
+          {
+            name: 'conditional_formatting',
+            config: {
+              type: 'ConditionalFormattingControl2',
+              renderTrigger: true,
+              label: t('Conditional formatting'),
+              description: t('Apply conditional color formatting to metric'),
+              mapStateToProps(explore) {
+                const values =
+                  explore?.controls?.metric.value !== undefined
+                    ? ([explore?.controls?.metric.value] as QueryFormMetric[])
+                    : [];
+                const verboseMap = explore?.datasource?.verbose_map ?? {};
+                const metricColumn = values.map(value => {
+                  if (typeof value === 'string') {
+                    return { value, label: verboseMap[value] ?? value };
+                  }
+                  return { value: value.label, label: value.label };
+                });
+                return {
+                  columnOptions: metricColumn,
+                  verboseMap,
+                };
+              },
             },
           },
         ],
