@@ -97,6 +97,7 @@ export default function transformProps(
     showProgress,
     overlap,
     roundCap,
+    showAxisLabel,
     showAxisTick,
     showSplitLine,
     splitNumber,
@@ -107,6 +108,7 @@ export default function transformProps(
     intervalColorIndices,
     valueFormatter,
     emitFilter,
+    titleOffset,
   }: EchartsGaugeFormData = { ...DEFAULT_GAUGE_FORM_DATA, ...formData };
   const data = (queriesData[0]?.data || []) as DataRecord[];
   const numberFormatter = getNumberFormatter(numberFormat);
@@ -152,7 +154,11 @@ export default function transformProps(
         title: {
           offsetCenter: [
             '0%',
-            `${index * titleOffsetFromTitle + OFFSETS.titleFromCenter}%`,
+            `${
+              index * titleOffsetFromTitle +
+              OFFSETS.titleFromCenter +
+              titleOffset
+            }%`,
           ],
           fontSize,
         },
@@ -162,7 +168,8 @@ export default function transformProps(
             `${
               index * titleOffsetFromTitle +
               OFFSETS.titleFromCenter +
-              detailOffsetFromTitle
+              detailOffsetFromTitle +
+              titleOffset
             }%`,
           ],
           fontSize: FONT_SIZE_MULTIPLIERS.detailFontSize * fontSize,
@@ -215,6 +222,7 @@ export default function transformProps(
     },
   };
   const axisLabel = {
+    show: showAxisLabel,
     distance:
       axisLineWidth -
       FONT_SIZE_MULTIPLIERS.axisLabelDistance *

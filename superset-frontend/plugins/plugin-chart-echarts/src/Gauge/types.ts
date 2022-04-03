@@ -42,6 +42,7 @@ export type EchartsGaugeFormData = QueryFormData & {
   showProgress: boolean;
   overlap: boolean;
   roundCap: boolean;
+  showAxisLabel: boolean;
   showAxisTick: boolean;
   showSplitLine: boolean;
   splitNumber: number;
@@ -52,6 +53,7 @@ export type EchartsGaugeFormData = QueryFormData & {
   intervalColorIndices: string;
   valueFormatter: string;
   emitFilter: boolean;
+  titleOffset: number;
 };
 
 export const DEFAULT_FORM_DATA: Partial<EchartsGaugeFormData> = {
@@ -66,6 +68,7 @@ export const DEFAULT_FORM_DATA: Partial<EchartsGaugeFormData> = {
   showProgress: true,
   overlap: true,
   roundCap: false,
+  showAxisLabel: false,
   showAxisTick: false,
   showSplitLine: false,
   splitNumber: 10,
@@ -76,6 +79,7 @@ export const DEFAULT_FORM_DATA: Partial<EchartsGaugeFormData> = {
   intervalColorIndices: '',
   valueFormatter: '{value}',
   emitFilter: false,
+  titleOffset: 0,
 };
 
 export interface EchartsGaugeChartProps extends ChartProps {

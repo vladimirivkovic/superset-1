@@ -200,6 +200,18 @@ const config: ControlPanelConfig = {
         [<h1 className="section-header">{t('Axis')}</h1>],
         [
           {
+            name: 'show_axis_label',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Show axis label'),
+              description: t('Whether to show the label on the axis'),
+              renderTrigger: true,
+              default: DEFAULT_FORM_DATA.showAxisLabel,
+            },
+          },
+        ],
+        [
+          {
             name: 'show_axis_tick',
             config: {
               type: 'CheckboxControl',
@@ -303,6 +315,21 @@ const config: ControlPanelConfig = {
               ),
               renderTrigger: true,
               default: DEFAULT_FORM_DATA.intervalColorIndices,
+            },
+          },
+        ],
+        [<h1 className="section-header">{t('Title and Detail')}</h1>],
+        [
+          {
+            name: 'title_offset',
+            config: {
+              type: 'TextControl',
+              isInt: true,
+              default: String(DEFAULT_FORM_DATA.titleOffset),
+              validators: [validateNonEmpty, validateInteger],
+              renderTrigger: true,
+              label: t('Offset'),
+              description: t('Title and Detail offset from center'),
             },
           },
         ],

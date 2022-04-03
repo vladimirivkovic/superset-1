@@ -58,6 +58,7 @@ export default function EditableTitle({
   certifiedBy,
   certificationDetails,
 }: EditableTitleProps) {
+  const PLACEHOLDER = 'empty';
   const [isEditing, setIsEditing] = useState(editing);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [lastTitle, setLastTitle] = useState(title);
@@ -102,7 +103,7 @@ export default function EditableTitle({
   }
 
   function handleBlur() {
-    const formattedTitle = currentTitle.trim();
+    const formattedTitle = currentTitle;
 
     if (!canEdit) {
       return;
@@ -112,6 +113,10 @@ export default function EditableTitle({
 
     if (!formattedTitle.length) {
       setCurrentTitle(lastTitle);
+      return;
+    }
+
+    if (currentTitle.trim() === PLACEHOLDER) {
       return;
     }
 
@@ -187,7 +192,7 @@ export default function EditableTitle({
         data-test="editable-title-input"
         ref={contentRef}
         type={isEditing ? 'text' : 'button'}
-        value={value}
+        value={isEditing ? value : value.trim() === '' ? PLACEHOLDER : value}
         className={!title ? 'text-muted' : undefined}
         onKeyDown={handleKeyDown}
         onChange={handleChange}
