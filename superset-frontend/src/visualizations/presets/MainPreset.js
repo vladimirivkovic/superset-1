@@ -64,6 +64,7 @@ import {
   EchartsTimeseriesStepChartPlugin,
   EchartsGraphChartPlugin,
   EchartsGaugeChartPlugin,
+  EchartsGaugeChartPlugin2,
   EchartsRadarChartPlugin,
   EchartsFunnelChartPlugin,
   EchartsTreemapChartPlugin,
@@ -112,6 +113,7 @@ export default class MainPreset extends Preset {
         new EchartsFunnelChartPlugin().configure({ key: 'funnel' }),
         new EchartsTreemapChartPlugin().configure({ key: 'treemap_v2' }),
         new EchartsGaugeChartPlugin().configure({ key: 'gauge_chart' }),
+        new EchartsGaugeChartPlugin2().configure({ key: 'gauge_chart_v2' }),
         new EchartsGraphChartPlugin().configure({ key: 'graph_chart' }),
         new EchartsRadarChartPlugin().configure({ key: 'radar' }),
         new EchartsMixedTimeseriesChartPlugin().configure({
