@@ -28,6 +28,7 @@ import {
 } from '@superset-ui/core';
 import { EChartsCoreOption, GaugeSeriesOption } from 'echarts';
 import { GaugeDataItemOption } from 'echarts/types/src/chart/gauge/GaugeSeries';
+import { isEmpty } from 'lodash';
 import range from 'lodash/range';
 import { parseNumbersList } from '../utils/controls';
 import {
@@ -44,7 +45,6 @@ import {
   FONT_SIZE_MULTIPLIERS,
 } from './constants';
 import { OpacityEnum } from '../constants';
-import { isEmpty } from 'lodash';
 
 const setIntervalBoundsAndColors = (
   intervals: string,
