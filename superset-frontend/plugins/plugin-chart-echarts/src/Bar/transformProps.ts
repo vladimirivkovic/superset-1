@@ -114,6 +114,7 @@ export default function transformProps(
     yAxisLabel,
     yAxisLabelLocation,
     yAxisLabelPadding,
+    tooltipStyle,
   }: EchartsBarFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
     ...DEFAULT_Bar_FORM_DATA,
@@ -267,7 +268,7 @@ export default function transformProps(
     //     }),
     // },
     tooltip: {
-      trigger: 'axis',
+      trigger: tooltipStyle,
       axisPointer: {
         type: 'shadow',
       },

@@ -26,7 +26,7 @@ import {
 } from '@superset-ui/chart-controls';
 
 import { legendSection } from '../controls';
-import { LABEL_LOCATIONS, VALUE_POSITIONS } from './types';
+import { LABEL_LOCATIONS, TOOLTIP_STYLES, VALUE_POSITIONS } from './types';
 
 const config: ControlPanelConfig = {
   controlPanelSections: [
@@ -129,6 +129,19 @@ const config: ControlPanelConfig = {
               renderTrigger: true,
               choices: VALUE_POSITIONS,
               default: 'inside',
+            },
+          },
+        ],
+        [
+          {
+            name: 'tooltipStyle',
+            config: {
+              type: 'SelectControl',
+              freeForm: true,
+              label: t('Tooltip style'),
+              renderTrigger: true,
+              choices: TOOLTIP_STYLES,
+              default: 'axis',
             },
           },
         ],

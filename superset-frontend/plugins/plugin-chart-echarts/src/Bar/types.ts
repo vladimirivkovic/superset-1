@@ -64,6 +64,7 @@ export type EchartsBarFormData = QueryFormData &
     yAxisLabel?: string;
     yAxisLabelLocation?: string;
     yAxisLabelPadding?: number;
+    tooltipStyle: string;
   };
 
 export enum EchartsBarLabelType {
@@ -98,6 +99,7 @@ export const DEFAULT_FORM_DATA: EchartsBarFormData = {
   showLabelsThreshold: 5,
   emitFilter: false,
   dateFormat: 'smart_date',
+  tooltipStyle: 'axis',
 };
 
 export interface BarChartTransformedProps {
@@ -133,4 +135,9 @@ export const VALUE_POSITIONS: [string, string][] = [
   ['insideBottomLeft', 'insideBottomLeft'],
   ['insideTopRight', 'insideTopRight'],
   ['insideBottomRight', 'insideBottomRight'],
+];
+
+export const TOOLTIP_STYLES: [string, string][] = [
+  ['axis', 'axis'],
+  ['item', 'item'],
 ];
