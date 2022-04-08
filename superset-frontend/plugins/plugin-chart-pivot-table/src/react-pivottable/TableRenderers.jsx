@@ -19,7 +19,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PivotData, flatKey } from './utilities';
+import { PivotData, flatKey, pickTextColorBasedOnBgColor } from './utilities';
 import { Styles } from './Styles';
 
 const parseLabel = value => {
@@ -690,9 +690,15 @@ export class TableRenderer extends React.Component {
         });
       }
 
+      const fontColor = pickTextColorBasedOnBgColor(
+        backgroundColor,
+        '#FFFFFF',
+        '#000000',
+      );
+
       const style = agg.isSubtotal
         ? { fontWeight: 'bold' }
-        : { backgroundColor };
+        : { backgroundColor, color: fontColor };
 
       return (
         <td

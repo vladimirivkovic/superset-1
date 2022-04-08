@@ -154,8 +154,16 @@ export default function transformProps(
   const colors: ZRColor[] =
     metricLabels.length > 1
       ? metricLabels.map(metricLabel => colorFn(metricLabel))
-      : data.map(datum => colorFn(`${datum[metricLabels[0]]}`));
-  console.log(colors);
+      : data.map(datum =>
+          colorFn(
+            extractGroupbyLabel({
+              datum,
+              groupby: groupbyLabels,
+              coltypeMapping,
+              timeFormatter: getTimeFormatter(dateFormat),
+            }),
+          ),
+        );
 
   function getTransformedDataForMetric(metricLabel: string): BarSeriesOption[] {
     return data.map(datum => {

@@ -104,12 +104,16 @@ export default function transformProps(
     splitNumber,
     startAngle,
     endAngle,
+    showTitle,
+    showDetail,
     showPointer,
     intervals,
     intervalColorIndices,
     valueFormatter,
     emitFilter,
     titleOffset,
+    titleFromTitleOffset,
+    detailFromTitleOffset,
   }: EchartsGaugeFormData = { ...DEFAULT_GAUGE_FORM_DATA, ...formData };
   const data = (queriesData[0]?.data || []) as DataRecord[];
   const numberFormatter = getNumberFormatter(numberFormat);
@@ -126,9 +130,9 @@ export default function transformProps(
   const axisTickLength = FONT_SIZE_MULTIPLIERS.axisTickLength * fontSize;
   const splitLineLength = FONT_SIZE_MULTIPLIERS.splitLineLength * fontSize;
   const titleOffsetFromTitle =
-    FONT_SIZE_MULTIPLIERS.titleOffsetFromTitle * fontSize;
+    FONT_SIZE_MULTIPLIERS.titleOffsetFromTitle * fontSize * titleFromTitleOffset;
   const detailOffsetFromTitle =
-    FONT_SIZE_MULTIPLIERS.detailOffsetFromTitle * fontSize;
+    FONT_SIZE_MULTIPLIERS.detailOffsetFromTitle * fontSize * detailFromTitleOffset;
   const intervalBoundsAndColors = setIntervalBoundsAndColors(
     intervals,
     intervalColorIndices,
@@ -158,9 +162,10 @@ export default function transformProps(
           value: data_point[metricLabel] as number,
           name: itemName,
           itemStyle: {
-            color: colorFn(index * metrics.length + metricIndex),
+            color: colorFn(itemName),
           },
           title: {
+            show: showTitle,
             offsetCenter: [
               '0%',
               `${
@@ -172,6 +177,7 @@ export default function transformProps(
             fontSize,
           },
           detail: {
+            show: showDetail,
             offsetCenter: [
               '0%',
               `${
@@ -191,7 +197,6 @@ export default function transformProps(
           item = {
             ...item,
             itemStyle: {
-              color: colorFn(index),
               opacity: OpacityEnum.SemiTransparent,
             },
             detail: {

@@ -149,7 +149,7 @@ export default function transformProps(
         value: data_point[getMetricLabel(metric as QueryFormMetric)] as number,
         name,
         itemStyle: {
-          color: colorFn(index),
+          color: colorFn(name),
         },
         title: {
           offsetCenter: [
@@ -182,7 +182,6 @@ export default function transformProps(
         item = {
           ...item,
           itemStyle: {
-            color: colorFn(index),
             opacity: OpacityEnum.SemiTransparent,
           },
           detail: {

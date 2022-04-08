@@ -193,7 +193,7 @@ export default function transformProps(
   const defaultLabel = {
     formatter,
     show: showLabels,
-    color: '#000000',
+    // color: '#000000',
   };
 
   const series: PieSeriesOption[] = [
@@ -218,10 +218,10 @@ export default function transformProps(
             position: 'inner',
           },
       emphasis: {
-        label: {
-          show: true,
-          fontWeight: 'bold',
-          backgroundColor: 'white',
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
         },
       },
       data: transformedData,

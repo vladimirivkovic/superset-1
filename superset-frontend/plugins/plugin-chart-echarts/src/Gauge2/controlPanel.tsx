@@ -176,10 +176,30 @@ const config: ControlPanelConfig = {
             name: 'show_pointer',
             config: {
               type: 'CheckboxControl',
-              label: t('Show pointer'),
+              label: t('pointer'),
               description: t('Whether to show the pointer'),
               renderTrigger: true,
               default: DEFAULT_FORM_DATA.showPointer,
+            },
+          },
+          {
+            name: 'show_title',
+            config: {
+              type: 'CheckboxControl',
+              label: t('title'),
+              description: t('Whether to show metric title'),
+              renderTrigger: true,
+              default: true,
+            },
+          },
+          {
+            name: 'show_detail',
+            config: {
+              type: 'CheckboxControl',
+              label: t('detail'),
+              description: t('Whether to show metric value'),
+              renderTrigger: true,
+              default: true,
             },
           },
         ],
@@ -318,7 +338,7 @@ const config: ControlPanelConfig = {
             },
           },
         ],
-        [<h1 className="section-header">{t('Title and Detail')}</h1>],
+        [<h1 className="section-header">{t('Title and Detail Offsets')}</h1>],
         [
           {
             name: 'title_offset',
@@ -330,6 +350,40 @@ const config: ControlPanelConfig = {
               validators: [validateNonEmpty, validateInteger],
               renderTrigger: true,
               default: DEFAULT_FORM_DATA.titleOffset,
+            },
+          },
+        ],
+        [
+          {
+            name: 'title_from_title_offset',
+            config: {
+              type: 'SliderControl',
+              label: t('title from title offset'),
+              description: t(
+                'Font size for axis labels, detail value and other text elements',
+              ),
+              renderTrigger: true,
+              min: 0.1,
+              max: 10,
+              step: 0.1,
+              default: 1,
+            },
+          },
+        ],
+        [
+          {
+            name: 'detail_from_title_offset',
+            config: {
+              type: 'SliderControl',
+              label: t('detail from title offset'),
+              description: t(
+                'Font size for axis labels, detail value and other text elements',
+              ),
+              renderTrigger: true,
+              min: 0.1,
+              max: 10,
+              step: 0.1,
+              default: 1,
             },
           },
         ],
