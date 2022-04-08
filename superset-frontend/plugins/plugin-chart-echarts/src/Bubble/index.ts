@@ -21,8 +21,6 @@ import buildQuery from './buildQuery';
 import controlPanel from './controlPanel';
 import transformProps from './transformProps';
 import thumbnail from './images/thumbnail.png';
-import example1 from './images/Bubble_Chart.png';
-import example2 from './images/Bubble_Chart2.png';
 import { EchartsBubbleChartProps, EchartsBubbleFormData } from './types';
 
 export default class EchartsBubbleChartPlugin extends ChartPlugin<
@@ -49,7 +47,6 @@ export default class EchartsBubbleChartPlugin extends ChartPlugin<
         category: t('Part of a Whole'),
         credits: ['https://echarts.apache.org'],
         description: t(`Bubble chart from ECharts.`),
-        exampleGallery: [{ url: example1 }, { url: example2 }],
         name: t('Bubble Chart v2'),
         tags: [
           t('Aesthetic'),

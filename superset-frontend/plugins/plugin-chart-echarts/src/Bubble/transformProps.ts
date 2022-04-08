@@ -25,7 +25,7 @@ import {
   getNumberFormatter,
   getTimeFormatter,
 } from '@superset-ui/core';
-import { CallbackDataParams, ZRColor } from 'echarts/types/src/util/types';
+import { ZRColor } from 'echarts/types/src/util/types';
 import { EChartsCoreOption, ScatterSeriesOption } from 'echarts';
 import {
   DEFAULT_FORM_DATA as DEFAULT_Bar_FORM_DATA,
@@ -60,7 +60,6 @@ export default function transformProps(
     labelPositionX,
     labelPositionY,
     labelPosition,
-    valuePosition,
     xAxisLabel,
     xAxisLabelLocation,
     xAxisLabelPadding,
@@ -68,7 +67,10 @@ export default function transformProps(
     yAxisLabelLocation,
     yAxisLabelPadding,
     tooltipStyle,
-    tooltipFormatter,
+    splitLineX,
+    splitLineY,
+    scaleX,
+    scaleY,
     bubbleSizeScale,
   }: EchartsBubbleFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
@@ -148,8 +150,6 @@ export default function transformProps(
           const y = `${yLabel}: ${numberFormatter(params.data[1])}`;
           return `${entity}<br />${size}<br />${x}<br />${y}`;
         },
-        // formatter: '{a} : {b} : {c} : {c1} : {c0}',
-        // valueFormatter: (value) => `${value}`,
       },
       animation: true,
       emphasis: {
@@ -177,8 +177,8 @@ export default function transformProps(
       ...defaultGrid,
     },
     xAxis: {
-      splitLine: { show: false },
-      scale: true,
+      splitLine: { show: splitLineX },
+      scale: scaleX,
       name: xAxisLabel,
       nameLocation: xAxisLabelLocation,
       nameTextStyle: {
@@ -188,8 +188,8 @@ export default function transformProps(
       },
     },
     yAxis: {
-      splitLine: { show: false },
-      scale: true,
+      splitLine: { show: splitLineY },
+      scale: scaleY,
       name: yAxisLabel,
       nameLocation: yAxisLabelLocation,
       nameTextStyle: {

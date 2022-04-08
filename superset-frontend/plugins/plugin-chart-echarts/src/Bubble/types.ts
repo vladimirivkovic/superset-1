@@ -63,6 +63,10 @@ export type EchartsBubbleFormData = QueryFormData &
     yAxisLabelPadding?: number;
     tooltipStyle: string;
     tooltipFormatter: string;
+    splitLineX: boolean;
+    splitLineY: boolean;
+    scaleX: boolean;
+    scaleY: boolean;
     bubbleSizeScale: number;
     colorBy: ColorBy;
   };
@@ -101,6 +105,10 @@ export const DEFAULT_FORM_DATA: EchartsBubbleFormData = {
   dateFormat: 'smart_date',
   tooltipFormatter: '',
   tooltipStyle: 'axis',
+  splitLineX: false,
+  splitLineY: false,
+  scaleX: true,
+  scaleY: true,
   bubbleSizeScale: 1,
   colorBy: 'series',
 };

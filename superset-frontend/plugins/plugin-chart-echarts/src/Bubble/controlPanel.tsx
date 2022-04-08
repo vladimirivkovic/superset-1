@@ -21,7 +21,6 @@ import { t, validateNumber } from '@superset-ui/core';
 import {
   ControlPanelConfig,
   sections,
-  sharedControls,
   emitFilterControl,
 } from '@superset-ui/chart-controls';
 
@@ -125,10 +124,54 @@ const config: ControlPanelConfig = {
         // ],
         [
           {
+            name: 'splitLineX',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Split line X'),
+              renderTrigger: true,
+              default: DEFAULT_FORM_DATA.splitLineX,
+              description: t('Whether to show split line on X axis.'),
+            },
+          },
+          {
+            name: 'splitLineY',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Split line Y'),
+              renderTrigger: true,
+              default: DEFAULT_FORM_DATA.splitLineY,
+              description: t('Whether to show split line on Y axis.'),
+            },
+          },
+        ],
+        [
+          {
+            name: 'scaleX',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Scale X'),
+              renderTrigger: true,
+              default: DEFAULT_FORM_DATA.scaleX,
+              description: t('Whether to scale X axis.'),
+            },
+          },
+          {
+            name: 'scaleY',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Scale Y'),
+              renderTrigger: true,
+              default: DEFAULT_FORM_DATA.scaleY,
+              description: t('Whether to scale Y axis.'),
+            },
+          },
+        ],
+        [
+          {
             name: 'bubbleSizeScale',
             config: {
               type: 'TextControl',
-              label: t('Bubble size'),
+              label: t('Bubble size scale factor'),
               description: t('Scale bubble size'),
               validators: [validateNumber],
               renderTrigger: true,
