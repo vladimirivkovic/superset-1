@@ -118,15 +118,11 @@ export default function transformProps(
   const series: ScatterSeriesOption[] = [
     {
       type: 'scatter',
-      symbolSize: function (data) {
-        return data[2] * bubbleSizeScale;
-      },
+      symbolSize: data => data[2] * bubbleSizeScale,
       colorBy,
       label: {
         show: true,
-        formatter: function (param) {
-          return param.data[3];
-        },
+        formatter: param => param.data[3],
         position: labelPosition,
         minMargin: 2,
       },

@@ -26,6 +26,7 @@ import {
   QueryFormMetric,
   SetDataMaskHook,
 } from '@superset-ui/core';
+import { ColorBy } from 'echarts/types/src/util/types';
 import {
   DEFAULT_LEGEND_FORM_DATA,
   EchartsLegendFormData,
@@ -33,7 +34,6 @@ import {
   LegendOrientation,
   LegendType,
 } from '../types';
-import { ColorBy } from 'echarts/types/src/util/types';
 
 export type EchartsBubbleFormData = QueryFormData &
   EchartsLegendFormData & {
