@@ -130,9 +130,13 @@ export default function transformProps(
   const axisTickLength = FONT_SIZE_MULTIPLIERS.axisTickLength * fontSize;
   const splitLineLength = FONT_SIZE_MULTIPLIERS.splitLineLength * fontSize;
   const titleOffsetFromTitle =
-    FONT_SIZE_MULTIPLIERS.titleOffsetFromTitle * fontSize * titleFromTitleOffset;
+    FONT_SIZE_MULTIPLIERS.titleOffsetFromTitle *
+    fontSize *
+    titleFromTitleOffset;
   const detailOffsetFromTitle =
-    FONT_SIZE_MULTIPLIERS.detailOffsetFromTitle * fontSize * detailFromTitleOffset;
+    FONT_SIZE_MULTIPLIERS.detailOffsetFromTitle *
+    fontSize *
+    detailFromTitleOffset;
   const intervalBoundsAndColors = setIntervalBoundsAndColors(
     intervals,
     intervalColorIndices,
