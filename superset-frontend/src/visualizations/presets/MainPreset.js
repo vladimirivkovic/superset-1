@@ -36,6 +36,7 @@ import TableChartPlugin from '@superset-ui/plugin-chart-table';
 import TreemapChartPlugin from '@superset-ui/legacy-plugin-chart-treemap';
 import { WordCloudChartPlugin } from '@superset-ui/plugin-chart-word-cloud';
 import WorldMapChartPlugin from '@superset-ui/legacy-plugin-chart-world-map';
+import IndicatorChartPlugin from 'plugins/superset-indicator-chart';
 import {
   AreaChartPlugin,
   BarChartPlugin,
@@ -170,6 +171,7 @@ export default class MainPreset extends Preset {
         new TimeColumnFilterPlugin().configure({ key: 'filter_timecolumn' }),
         new TimeGrainFilterPlugin().configure({ key: 'filter_timegrain' }),
         new EchartsTreeChartPlugin().configure({ key: 'tree_chart' }),
+        new IndicatorChartPlugin().configure({ key: 'indicator' }),
         ...experimentalplugins,
       ],
     });
