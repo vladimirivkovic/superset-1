@@ -10,18 +10,19 @@ function insertMetricsIntoMarkdown(
   const numberFormatter = getNumberFormatter(numberFormat);
   let markdown = markdownTemplate.slice(0);
   const regexp = /({{(.*?)}})/g;
-  const matches = markdown.matchAll(regexp);
+  const matches = [...markdown.matchAll(regexp)];
 
-  for (const match of matches) {
+  matches.forEach((match: any) => {
     const metricLabel = match[2];
     let metric = dataRecord[metricLabel];
-    if (metric) {
+    if (typeof metric !== 'undefined') {
       if (typeof metric === 'number' && !ignore.includes(metricLabel)) {
         metric = numberFormatter(metric);
       }
       markdown = markdown.replace(match[1], String(metric));
     }
-  }
+  });
+
   return markdown;
 }
 
@@ -38,7 +39,7 @@ export default function transformProps(chartProps: ChartProps) {
   } = formData;
   const data = (queriesData[0]?.data || []) as DataRecord[];
 
-  let backgroundColors = data.map(_ => '#FFFFFF');
+  const backgroundColors = data.map(_ => '#FFFFFF');
 
   const metricColorFormatters = getColorFormatters2(
     conditionalFormatting,
