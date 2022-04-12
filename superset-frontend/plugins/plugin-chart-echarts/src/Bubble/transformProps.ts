@@ -28,7 +28,7 @@ import {
 import { ZRColor } from 'echarts/types/src/util/types';
 import { EChartsCoreOption, ScatterSeriesOption } from 'echarts';
 import {
-  DEFAULT_FORM_DATA as DEFAULT_Bar_FORM_DATA,
+  DEFAULT_FORM_DATA as DEFAULT_Bubble_FORM_DATA,
   EchartsBubbleChartProps,
   EchartsBubbleFormData,
   BubbleChartTransformedProps,
@@ -57,6 +57,7 @@ export default function transformProps(
     dateFormat,
     numberFormat,
     emitFilter,
+    symbol,
     labelPositionX,
     labelPositionY,
     labelPosition,
@@ -74,7 +75,7 @@ export default function transformProps(
     bubbleSizeScale,
   }: EchartsBubbleFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
-    ...DEFAULT_Bar_FORM_DATA,
+    ...DEFAULT_Bubble_FORM_DATA,
     ...formData,
   };
   const entityLabel = getColumnLabel(entity);
@@ -118,6 +119,7 @@ export default function transformProps(
   const series: ScatterSeriesOption[] = [
     {
       type: 'scatter',
+      symbol,
       symbolSize: data => data[2] * bubbleSizeScale,
       colorBy,
       label: {

@@ -24,8 +24,14 @@ import {
   emitFilterControl,
 } from '@superset-ui/chart-controls';
 
-import { COLOR_TYPES, DEFAULT_FORM_DATA, TOOLTIP_STYLES } from './types';
+import {
+  COLOR_TYPES,
+  DEFAULT_FORM_DATA,
+  SYMBOL_SHAPES,
+  TOOLTIP_STYLES,
+} from './types';
 import { LABEL_POSITION } from '../constants';
+import { LABEL_LOCATIONS } from '../Bar/types';
 
 const config: ControlPanelConfig = {
   controlPanelSections: [
@@ -77,6 +83,32 @@ const config: ControlPanelConfig = {
         ],
         [
           {
+            name: 'symbol',
+            config: {
+              type: 'SelectControl',
+              freeForm: true,
+              label: t('Symbol shape'),
+              renderTrigger: true,
+              choices: SYMBOL_SHAPES,
+              default: DEFAULT_FORM_DATA.symbol,
+            },
+          },
+        ],
+        [
+          {
+            name: 'labelPosition',
+            config: {
+              type: 'SelectControl',
+              freeForm: true,
+              label: t('Label position'),
+              renderTrigger: true,
+              choices: LABEL_POSITION,
+              default: DEFAULT_FORM_DATA.labelPosition,
+            },
+          },
+        ],
+        [
+          {
             name: 'labelPositionX',
             config: {
               type: 'TextControl',
@@ -110,18 +142,6 @@ const config: ControlPanelConfig = {
             },
           },
         ],
-        // [
-        //   {
-        //     name: 'tooltipFormatter',
-        //     config: {
-        //       type: 'TextControl',
-        //       label: t('Tooltip value format'),
-        //       description: t('Tooltip value format'),
-        //       renderTrigger: true,
-        //       default: DEFAULT_FORM_DATA.tooltipFormatter,
-        //     },
-        //   },
-        // ],
         [
           {
             name: 'splitLineX',
@@ -199,7 +219,7 @@ const config: ControlPanelConfig = {
               freeForm: true,
               label: t('X Axis Label Location'),
               renderTrigger: true,
-              choices: LABEL_POSITION,
+              choices: LABEL_LOCATIONS,
               default: 'center',
             },
           },
@@ -234,7 +254,7 @@ const config: ControlPanelConfig = {
               freeForm: true,
               label: t('Y Axis Label Location'),
               renderTrigger: true,
-              choices: LABEL_POSITION,
+              choices: LABEL_LOCATIONS,
               default: 'center',
             },
           },

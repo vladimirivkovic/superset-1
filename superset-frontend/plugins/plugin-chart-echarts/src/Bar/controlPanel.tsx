@@ -26,7 +26,8 @@ import {
 } from '@superset-ui/chart-controls';
 
 import { legendSection } from '../controls';
-import { LABEL_LOCATIONS, TOOLTIP_STYLES, VALUE_POSITIONS } from './types';
+import { LABEL_LOCATIONS, TOOLTIP_STYLES } from './types';
+import { LABEL_POSITION } from '../constants';
 
 const config: ControlPanelConfig = {
   controlPanelSections: [
@@ -127,7 +128,7 @@ const config: ControlPanelConfig = {
               freeForm: true,
               label: t('Value position'),
               renderTrigger: true,
-              choices: VALUE_POSITIONS,
+              choices: LABEL_POSITION,
               default: 'inside',
             },
           },

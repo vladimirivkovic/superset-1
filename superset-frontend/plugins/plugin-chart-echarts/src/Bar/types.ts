@@ -121,22 +121,6 @@ export const LABEL_LOCATIONS: [string, string][] = [
   ['end', 'end'],
 ];
 
-export const VALUE_POSITIONS: [string, string][] = [
-  ['top', 'top'],
-  ['left', 'left'],
-  ['right', 'right'],
-  ['bottom', 'bottom'],
-  ['inside', 'inside'],
-  ['insideLeft', 'insideLeft'],
-  ['insideRight', 'insideRight'],
-  ['insideTop', 'insideTop'],
-  ['insideBottom', 'insideBottom'],
-  ['insideTopLeft', 'insideTopLeft'],
-  ['insideBottomLeft', 'insideBottomLeft'],
-  ['insideTopRight', 'insideTopRight'],
-  ['insideBottomRight', 'insideBottomRight'],
-];
-
 export const TOOLTIP_STYLES: [string, string][] = [
   ['axis', 'axis'],
   ['item', 'item'],

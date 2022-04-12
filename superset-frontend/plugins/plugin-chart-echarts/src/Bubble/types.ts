@@ -69,6 +69,7 @@ export type EchartsBubbleFormData = QueryFormData &
     scaleY: boolean;
     bubbleSizeScale: number;
     colorBy: ColorBy;
+    symbol: string;
   };
 
 export enum EchartsBubbleLabelType {
@@ -111,6 +112,7 @@ export const DEFAULT_FORM_DATA: EchartsBubbleFormData = {
   scaleY: true,
   bubbleSizeScale: 1,
   colorBy: 'series',
+  symbol: 'circle',
 };
 
 export interface BubbleChartTransformedProps {
@@ -133,4 +135,15 @@ export const TOOLTIP_STYLES: [string, string][] = [
 export const COLOR_TYPES: [string, string][] = [
   ['series', 'series'],
   ['data', 'data'],
+];
+
+export const SYMBOL_SHAPES: [string, string][] = [
+  ['circle', 'circle'],
+  ['rect', 'rect'],
+  ['roundRect', 'roundRect'],
+  ['triangle', 'triangle'],
+  ['diamond', 'diamond'],
+  ['pin', 'pin'],
+  ['arrow', 'arrow'],
+  ['none', 'none'],
 ];
