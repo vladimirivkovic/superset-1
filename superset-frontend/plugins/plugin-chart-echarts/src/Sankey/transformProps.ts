@@ -16,39 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { toNumber } from 'lodash';
 import {
   CategoricalColorNamespace,
   DataRecordValue,
   getColumnLabel,
   getMetricLabel,
-  getNumberFormatter,
   getTimeFormatter,
-  NumberFormats,
-  NumberFormatter,
 } from '@superset-ui/core';
-import { CallbackDataParams, ZRColor } from 'echarts/types/src/util/types';
+import { ZRColor } from 'echarts/types/src/util/types';
 import { EChartsCoreOption, SankeySeriesOption } from 'echarts';
 import {
   DEFAULT_FORM_DATA as DEFAULT_Sankey_FORM_DATA,
   EchartsSankeyChartProps,
   EchartsSankeyFormData,
-  EchartsSankeyLabelType,
   SankeyChartTransformedProps,
 } from './types';
 import { DEFAULT_LEGEND_FORM_DATA } from '../types';
-import {
-  extractGroupbyLabel,
-  getChartPadding,
-  getColtypesMapping,
-  getLegendProps,
-  sanitizeHtml,
-} from '../utils/series';
+import { extractGroupbyLabel, getColtypesMapping } from '../utils/series';
 import { defaultGrid } from '../defaults';
-import { OpacityEnum } from '../constants';
-
-const percentFormatter = getNumberFormatter(NumberFormats.PERCENT_2_POINT);
-const valueFormatter = getNumberFormatter(NumberFormats.SMART_NUMBER);
 
 export default function transformProps(
   chartProps: EchartsSankeyChartProps,
@@ -61,24 +46,21 @@ export default function transformProps(
   const {
     colorScheme,
     groupby,
-    labelsOutside,
-    labelLine,
-    legendOrientation,
-    legendType,
-    legendMargin,
-    showLegend,
     metric,
     dateFormat,
     emitFilter,
-    showValues,
-    valuePosition,
-    xAxisLabel,
-    xAxisLabelLocation,
-    xAxisLabelPadding,
-    yAxisLabel,
-    yAxisLabelLocation,
-    yAxisLabelPadding,
-    tooltipStyle,
+    tooltipFormatter,
+    draggable,
+    silent,
+    nodeWidth,
+    nodeGap,
+    nodeAlign,
+    orient,
+    showLabels,
+    labelPosition,
+    labelAlign,
+    curveness,
+    lineStyleColor,
   }: EchartsSankeyFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
     ...DEFAULT_Sankey_FORM_DATA,
@@ -130,33 +112,20 @@ export default function transformProps(
   const { setDataMask = () => {} } = hooks;
 
   const colorFn = CategoricalColorNamespace.getScale(colorScheme as string);
-  // const numberFormatter = getNumberFormatter(numberFormat);
-  // const colors: ZRColor[] =
-  //   metricLabels.length > 1
-  //     ? metricLabels.map(metricLabel => colorFn(metricLabel))
-  //     : data.map(datum =>
-  //         colorFn(
-  //           extractGroupbyLabel({
-  //             datum,
-  //             groupby: groupbyLabels,
-  //             coltypeMapping,
-  //             timeFormatter: getTimeFormatter(dateFormat),
-  //           }),
-  //         ),
-  //       );
 
   const transformedData = keys.map(key => ({
     name: key,
   }));
 
   const links = data.map(datum => ({
-    source: datum[sourceLabel],
-    target: datum[targetLabel],
-    value: datum[metricLabel],
+    source: String(datum[sourceLabel]),
+    target: String(datum[targetLabel]),
+    value: Number(datum[metricLabel]),
   }));
 
-  console.log(transformedData);
-  console.log(links);
+  const colors: ZRColor[] = links.map(link =>
+    colorFn(`${link.source}_${link.target}`),
+  );
 
   const selectedValues = (filterState.selectedValues || []).reduce(
     (acc: Record<string, number>, selectedValue: string) => {
@@ -174,8 +143,18 @@ export default function transformProps(
   const series: SankeySeriesOption[] = [
     {
       type: 'sankey',
+      draggable,
+      nodeWidth,
+      nodeGap,
+      nodeAlign,
+      orient,
+      silent,
+      label: {
+        show: showLabels,
+        position: labelPosition,
+        align: labelAlign,
+      },
       animation: true,
-      layout: 'none',
       emphasis: {
         focus: 'adjacency',
       },
@@ -186,8 +165,8 @@ export default function transformProps(
         enabled: true,
       },
       lineStyle: {
-        color: 'source',
-        curveness: 0.5,
+        color: lineStyleColor,
+        curveness,
       },
     },
   ];
@@ -199,11 +178,9 @@ export default function transformProps(
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
+      formatter: tooltipFormatter,
     },
-    // legend: {
-    //   ...getLegendProps(legendType, legendOrientation, showLegend),
-    // },
-    // color: colors,
+    color: colors,
     series,
   };
 

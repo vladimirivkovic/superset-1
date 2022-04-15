@@ -100,6 +100,11 @@ export const DEFAULT_FORM_DATA: EchartsSankeyFormData = {
   emitFilter: false,
   dateFormat: 'smart_date',
   tooltipStyle: 'axis',
+  nodeWidth: 20,
+  nodeGap: 8,
+  nodeAlign: 'justify',
+  orient: 'horizontal',
+  lineStyleColor: 'source',
 };
 
 export interface SankeyChartTransformedProps {
@@ -124,4 +129,21 @@ export const LABEL_LOCATIONS: [string, string][] = [
 export const TOOLTIP_STYLES: [string, string][] = [
   ['axis', 'axis'],
   ['item', 'item'],
+];
+
+export const NODE_ALIGN_VALUES: [string, string][] = [
+  ['justify', 'justify'],
+  ['left', 'left'],
+  ['right', 'right'],
+];
+
+export const ORIENT_VALUES: [string, string][] = [
+  ['horizontal', 'horizontal'],
+  ['vertical', 'vertical'],
+];
+
+export const LINE_STYLE_COLORS: [string, string][] = [
+  ['source', 'source'],
+  ['target', 'target'],
+  ['gradient', 'gradient'],
 ];
