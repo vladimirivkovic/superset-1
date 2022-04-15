@@ -103,6 +103,7 @@ const config: ControlPanelConfig = {
                 ['key', 'Category Name'],
                 ['value', 'Value'],
                 ['percent', 'Percentage'],
+                ['percent_rounded', 'Percentage Rounded'],
                 ['key_value', 'Category and Value'],
                 ['key_percent', 'Category and Percentage'],
                 ['key_value_percent', 'Category, Value and Percentage'],

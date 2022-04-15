@@ -48,7 +48,6 @@ import { defaultGrid } from '../defaults';
 import { OpacityEnum } from '../constants';
 
 const percentFormatter = getNumberFormatter(NumberFormats.PERCENT_2_POINT);
-const valueFormatter = getNumberFormatter(NumberFormats.SMART_NUMBER);
 
 export function formatBarLabel({
   params,
@@ -108,13 +107,21 @@ export default function transformProps(
     stack,
     showValues,
     valuePosition,
+    valueRotation,
+    xAxisShow,
+    xAxisValueRotation,
+    xAxisValueMax,
     xAxisLabel,
     xAxisLabelLocation,
     xAxisLabelPadding,
+    yAxisShow,
+    yAxisValueRotation,
+    yAxisValueMax,
     yAxisLabel,
     yAxisLabelLocation,
     yAxisLabelPadding,
     tooltipStyle,
+    metricLabelConfig,
   }: EchartsBarFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
     ...DEFAULT_Bar_FORM_DATA,
@@ -122,6 +129,19 @@ export default function transformProps(
   };
   const metricLabels = metrics.map(m => getMetricLabel(m));
   const groupbyLabels = groupby.map(getColumnLabel);
+  const valueFormatter = getNumberFormatter(NumberFormats.SMART_NUMBER);
+
+  const sumByMetric = metricLabels
+    .map(metricLabel => ({
+      metricLabel,
+      sum: data
+        .map(datum => datum[metricLabel])
+        .reduce((a, b) => toNumber(a) + toNumber(b), 0),
+    }))
+    .reduce(
+      (obj, item) => Object.assign(obj, { [item.metricLabel]: item.sum }),
+      {},
+    );
 
   const keys = data.map(datum =>
     extractGroupbyLabel({
@@ -150,7 +170,6 @@ export default function transformProps(
   const { setDataMask = () => {} } = hooks;
 
   const colorFn = CategoricalColorNamespace.getScale(colorScheme as string);
-  // const numberFormatter = getNumberFormatter(numberFormat);
   const colors: ZRColor[] =
     metricLabels.length > 1
       ? metricLabels.map(metricLabel => colorFn(metricLabel))
@@ -207,32 +226,57 @@ export default function transformProps(
     {},
   );
 
-  const series: BarSeriesOption[] = metricLabels.map(metricLabel => ({
-    type: 'bar',
-    stack: stack ? 'total' : undefined,
-    colorBy: metricLabels.length > 1 ? 'series' : 'data',
-    label: {
-      show: showValues,
-      position: valuePosition,
-      formatter: (params: any) => {
-        const {
-          data: { value },
-        } = params;
-        return valueFormatter(value);
+  const metricValueFormatter = function (params: any) {
+    const {
+      data: { value },
+    } = params;
+
+    if (metricLabelConfig?.[params.seriesName]) {
+      const { barMetricValueFormat, barMetricValueThreshold } =
+        metricLabelConfig[params.seriesName];
+      const barMetricValueFormatter = getNumberFormatter(barMetricValueFormat);
+      const threshold = barMetricValueThreshold ?? 0;
+
+      if (barMetricValueFormat?.includes('%')) {
+        const displayValue = value / sumByMetric[params.seriesName];
+        return displayValue * 100 > threshold
+          ? barMetricValueFormatter(displayValue)
+          : '';
+      }
+
+      return value > threshold ? barMetricValueFormatter(value) : '';
+    }
+
+    return valueFormatter(value);
+  };
+
+  const series: BarSeriesOption[] = metrics.map(m => {
+    const metricLabel = getMetricLabel(m);
+    return {
+      type: 'bar',
+      stack: stack ? 'total' : undefined,
+      colorBy: metrics.length > 1 ? 'series' : 'data',
+      label: {
+        show: showValues,
+        position: valuePosition,
+        rotate: valueRotation,
+        formatter: metricValueFormatter,
       },
-    },
-    ...getChartPadding(showLegend, legendOrientation, legendMargin),
-    animation: true,
-    labelLine: labelsOutside && labelLine ? { show: true } : { show: false },
-    emphasis: {
-      focus: 'series',
-    },
-    name: metricLabel,
-    data: getTransformedDataForMetric(metricLabel),
-    universalTransition: {
-      enabled: true,
-    },
-  }));
+      ...getChartPadding(showLegend, legendOrientation, legendMargin),
+      animation: true,
+      labelLine: labelsOutside && labelLine ? { show: true } : { show: false },
+      emphasis: {
+        focus: 'series',
+      },
+      name: metricLabel,
+      data: getTransformedDataForMetric(metricLabel),
+      universalTransition: {
+        enabled: true,
+      },
+    };
+  });
+
+  console.log(xAxisValueMax);
 
   const echartOptions: EChartsCoreOption = {
     grid: {
@@ -242,6 +286,13 @@ export default function transformProps(
       type: vertical ? 'category' : 'value',
       boundaryGap: vertical ? true : [0, 0.1],
       data: vertical ? keys : undefined,
+      show: xAxisShow,
+      axisLabel: {
+        show: xAxisShow,
+        rotate: xAxisValueRotation,
+        interval: 0,
+      },
+      max: vertical ? null : toNumber(xAxisValueMax) ? xAxisValueMax : null,
       splitLine: false,
       name: xAxisLabel,
       nameLocation: xAxisLabelLocation,
@@ -255,6 +306,13 @@ export default function transformProps(
       type: vertical ? 'value' : 'category',
       boundaryGap: vertical ? [0, 0.1] : true,
       data: vertical ? undefined : keys,
+      show: yAxisShow,
+      axisLabel: {
+        show: yAxisShow,
+        rotate: yAxisValueRotation,
+        interval: 0,
+      },
+      max: vertical ? (toNumber(yAxisValueMax) ? yAxisValueMax : null) : null,
       splitLine: false,
       name: yAxisLabel,
       nameLocation: yAxisLabelLocation,
@@ -264,17 +322,6 @@ export default function transformProps(
           (yAxisLabelPadding !== undefined ? toNumber(yAxisLabelPadding) : 0),
       },
     },
-    // tooltip: {
-    //   ...defaultTooltip,
-    //   trigger: 'item',
-    //   formatter: (params: any) =>
-    //     formatBarLabel({
-    //       params,
-    //       numberFormatter,
-    //       labelType: EchartsBarLabelType.KeyValue,
-    //       sanitizeName: true,
-    //     }),
-    // },
     tooltip: {
       trigger: tooltipStyle,
       axisPointer: {

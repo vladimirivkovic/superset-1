@@ -47,6 +47,9 @@ import { defaultGrid, defaultTooltip } from '../defaults';
 import { OpacityEnum } from '../constants';
 
 const percentFormatter = getNumberFormatter(NumberFormats.PERCENT_2_POINT);
+const percentFormatterRounded = getNumberFormatter(
+  NumberFormats.PERCENT_0_POINT,
+);
 
 export function formatPieLabel({
   params,
@@ -63,6 +66,9 @@ export function formatPieLabel({
   const name = sanitizeName ? sanitizeHtml(rawName) : rawName;
   const formattedValue = numberFormatter(value as number);
   const formattedPercent = percentFormatter((percent as number) / 100);
+  const formattedPercentRounded = percentFormatterRounded(
+    (percent as number) / 100,
+  );
 
   switch (labelType) {
     case EchartsPieLabelType.Key:
@@ -71,6 +77,8 @@ export function formatPieLabel({
       return formattedValue;
     case EchartsPieLabelType.Percent:
       return formattedPercent;
+    case EchartsPieLabelType.PercentRounded:
+      return formattedPercentRounded;
     case EchartsPieLabelType.KeyValue:
       return `${name}: ${formattedValue}`;
     case EchartsPieLabelType.KeyValuePercent:

@@ -21,6 +21,7 @@ import {
   ChartDataResponseResult,
   ChartProps,
   DataRecordValue,
+  NumberFormats,
   QueryFormColumn,
   QueryFormData,
   QueryFormMetric,
@@ -65,6 +66,7 @@ export type EchartsBarFormData = QueryFormData &
     yAxisLabelLocation?: string;
     yAxisLabelPadding?: number;
     tooltipStyle: string;
+    valueFormat: string;
   };
 
 export enum EchartsBarLabelType {
@@ -100,6 +102,7 @@ export const DEFAULT_FORM_DATA: EchartsBarFormData = {
   emitFilter: false,
   dateFormat: 'smart_date',
   tooltipStyle: 'axis',
+  valueFormat: NumberFormats.SMART_NUMBER,
 };
 
 export interface BarChartTransformedProps {
@@ -124,4 +127,10 @@ export const LABEL_LOCATIONS: [string, string][] = [
 export const TOOLTIP_STYLES: [string, string][] = [
   ['axis', 'axis'],
   ['item', 'item'],
+];
+
+export const VALUE_FORMATS: [string, string][] = [
+  [NumberFormats.SMART_NUMBER, 'smart number'],
+  [NumberFormats.PERCENT, 'percent'],
+  [NumberFormats.PERCENT_0_POINT, 'percent rounded'],
 ];

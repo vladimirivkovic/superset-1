@@ -17,17 +17,50 @@
  * under the License.
  */
 import React from 'react';
-import { t, validateNonEmpty } from '@superset-ui/core';
+import {
+  ChartDataResponseResult,
+  GenericDataType,
+  QueryFormMetric,
+  t,
+  validateNonEmpty,
+  validateNumber,
+} from '@superset-ui/core';
 import {
   ControlPanelConfig,
   sections,
   sharedControls,
   emitFilterControl,
+  ControlFormItemSpec,
 } from '@superset-ui/chart-controls';
 
 import { legendSection } from '../controls';
-import { LABEL_LOCATIONS, TOOLTIP_STYLES } from './types';
+import { LABEL_LOCATIONS, TOOLTIP_STYLES, VALUE_FORMATS } from './types';
 import { LABEL_POSITION } from '../constants';
+
+const barMetricValueFormat: { name: string; config: ControlFormItemSpec } = {
+  name: 'barMetricValueFormat',
+  config: {
+    controlType: 'Select',
+    label: t('Format'),
+    description: t('Value formatter'),
+    options: VALUE_FORMATS,
+    width: 240,
+    debounceDelay: 300,
+  },
+};
+
+const barMetricValueThreshold: { name: string; config: ControlFormItemSpec } = {
+  name: 'barMetricValueThreshold',
+  config: {
+    controlType: 'InputNumber',
+    label: t('Threshold'),
+    description: t('Minimum threshold for showing labels'),
+    defaultValue: 0,
+    width: 240,
+    debounceDelay: 300,
+    validators: [validateNumber],
+  },
+};
 
 const config: ControlPanelConfig = {
   controlPanelSections: [
@@ -122,6 +155,43 @@ const config: ControlPanelConfig = {
         ],
         [
           {
+            name: 'metricLabelConfig',
+            config: {
+              type: 'ColumnConfigControl',
+              label: t('Customize metric labels'),
+              description: t('Further customize how to format metric labels'),
+              renderTrigger: true,
+              configFormLayout: {
+                [GenericDataType.NUMERIC]: [
+                  [barMetricValueFormat],
+                  [barMetricValueThreshold],
+                ],
+              },
+              shouldMapStateToProps() {
+                return true;
+              },
+              mapStateToProps(explore, _, chart) {
+                const values =
+                  (explore?.controls?.metrics?.value as QueryFormMetric[]) ??
+                  [];
+                const metricColumn = values.map(value => {
+                  if (typeof value === 'string') {
+                    return value;
+                  }
+                  return value.label;
+                });
+                return {
+                  queryResponse: chart?.queriesResponse?.[0] as
+                    | ChartDataResponseResult
+                    | undefined,
+                  appliedColumnNames: metricColumn,
+                };
+              },
+            },
+          },
+        ],
+        [
+          {
             name: 'valuePosition',
             config: {
               type: 'SelectControl',
@@ -130,6 +200,17 @@ const config: ControlPanelConfig = {
               renderTrigger: true,
               choices: LABEL_POSITION,
               default: 'inside',
+            },
+          },
+          {
+            name: 'valueRotation',
+            config: {
+              type: 'TextControl',
+              label: t('Value rotation'),
+              renderTrigger: true,
+              isFloat: true,
+              debounceDelay: 300,
+              default: 0,
             },
           },
         ],
@@ -147,7 +228,42 @@ const config: ControlPanelConfig = {
           },
         ],
         ...legendSection.slice(0, -1),
-        [<h1 className="section-header">{t('Labels')}</h1>],
+        [<h1 className="section-header">{t('Axis Labels')}</h1>],
+        [
+          {
+            name: 'x_axis_show',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Show X Axis'),
+              renderTrigger: true,
+              default: true,
+            },
+          },
+        ],
+        [
+          {
+            name: 'x_axis_value_rotation',
+            config: {
+              type: 'TextControl',
+              label: t('X Axis Values Angle'),
+              renderTrigger: true,
+              isFloat: true,
+              debounceDelay: 300,
+              default: 0,
+            },
+          },
+          {
+            name: 'x_axis_value_max',
+            config: {
+              type: 'TextControl',
+              label: t('X Axis Max Value'),
+              renderTrigger: true,
+              isFloat: true,
+              debounceDelay: 300,
+              default: 0,
+            },
+          },
+        ],
         [
           {
             name: 'x_axis_label',
@@ -180,6 +296,41 @@ const config: ControlPanelConfig = {
               label: t('X Axis Label Padding'),
               renderTrigger: true,
               default: '',
+            },
+          },
+        ],
+        [
+          {
+            name: 'y_axis_show',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Show Y Axis'),
+              renderTrigger: true,
+              default: true,
+            },
+          },
+        ],
+        [
+          {
+            name: 'y_axis_value_rotation',
+            config: {
+              type: 'TextControl',
+              label: t('Y Axis Values Angle'),
+              renderTrigger: true,
+              isFloat: true,
+              debounceDelay: 300,
+              default: 0,
+            },
+          },
+          {
+            name: 'y_axis_value_max',
+            config: {
+              type: 'TextControl',
+              label: t('Y Axis Max Value'),
+              renderTrigger: true,
+              isFloat: true,
+              debounceDelay: 300,
+              default: 0,
             },
           },
         ],

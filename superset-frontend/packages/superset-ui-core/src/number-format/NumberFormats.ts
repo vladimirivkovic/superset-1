@@ -35,6 +35,7 @@ const FLOAT_SIGNED = FLOAT_SIGNED_2_POINT;
 const INTEGER = ',d';
 const INTEGER_SIGNED = '+,d';
 
+const PERCENT_0_POINT = ',.0%';
 const PERCENT_1_POINT = ',.1%';
 const PERCENT_2_POINT = ',.2%';
 const PERCENT_3_POINT = ',.3%';
@@ -69,6 +70,7 @@ const NumberFormats = {
   INTEGER,
   INTEGER_SIGNED,
   PERCENT,
+  PERCENT_0_POINT,
   PERCENT_1_POINT,
   PERCENT_2_POINT,
   PERCENT_3_POINT,
