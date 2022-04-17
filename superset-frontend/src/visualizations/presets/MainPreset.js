@@ -72,6 +72,7 @@ import {
   EchartsTreemapChartPlugin,
   EchartsMixedTimeseriesChartPlugin,
   EchartsTreeChartPlugin,
+  EchartsSankeyChartPlugin,
 } from '@superset-ui/plugin-chart-echarts';
 import {
   SelectFilterPlugin,
@@ -116,6 +117,7 @@ export default class MainPreset extends Preset {
         new EchartsTreemapChartPlugin().configure({ key: 'treemap_v2' }),
         new EchartsGaugeChartPlugin().configure({ key: 'gauge_chart' }),
         new EchartsGaugeChartPlugin2().configure({ key: 'gauge_chart_v2' }),
+        new EchartsSankeyChartPlugin().configure({ key: 'sankey_v2' }),
         new EchartsBubbleChartPlugin().configure({ key: 'bubble_v2' }),
         new EchartsGraphChartPlugin().configure({ key: 'graph_chart' }),
         new EchartsRadarChartPlugin().configure({ key: 'radar' }),
